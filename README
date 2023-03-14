@@ -1,0 +1,19 @@
+The idea of this is to make a matrix of features for each cell line out of a binned genome
+This way, when we call dots on Hi-C/Micro-C/HiChIP (eventually), we can filter them based on features present on the linear genome
+Sort of like a compendium for by-celltype epigenomic features
+This gives meaning to dots called on a matrix  - the nature of these methods obscures the meaning of the loops, as they are commonly presented as dots on the interaction matrix
+
+Two routes:
+1. Bin ALL READS from each experiment and have those as values in matrix - this would require some significane determination, and we already have peak calling to do that
+2. Demarcate the presence of a peak for the given feature by a '1' and the absence of a peak by a '0' - this seems like the best option
+
+Ex:
+		SMC1	CTCF	YY1	Promoter	Enhancer
+chr1:1-5000	0	0	0	1		0
+chr1:5001:10000	0	1	0	0		0
+.		
+.
+.
+.
+.
+chrN:X-X+binsize	0	0	0		0
