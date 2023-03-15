@@ -20,42 +20,32 @@ def make_bins(binsize, chromsizes):
     binned_genome = bioframe.binnify(chromsizes = chromsizes, binsize = binsize, rel_ids = True)
     return binned_genome
 
-def main():
-    #### Arguments
-    parser = argparse.ArgumentParser(description = "Make a feature matrix from a given set of BED files")
-    parser.add_argument("--features", "-f", type=str, nargs = "*", help="Path to bed files containing feature regions. Format should be chr,start,end", required=True)
-    parser.add_argument("--featureNames", "-n", type=str, nargs = "*", help="Names of columns to be associated with features", required=True)
-    parser.add_argument("--resolution", "-r", type=int, help="Size (in bp) of bins. Typically in the range of 400 - 25000", required=True)
-    parser.add_argument("--genome", "-g", type=str, help="Genome assembly used to align feature samples", required=False, default='hg38')
-    parser.add_argument("--prefix", "-p", type=str, help="Prefix for output file: {prefix}_{res}bp.matrix", default="featureMatrix")
-    #parser.add_argument("--dots", "-d", type=str, help="Path to dots (chr1,start1,end1,chr2,start2,end2), whose Anchors will be present as features in the output matrix")
-    args=parser.parse_args()
-
-    ### Progress bar
-    bar = IncrementalBar('Processing Features', max = len(args.features))
+def make_feature_matrices(features, featureNames, resolution, genome):
+     ### Progress bar
+    bar = IncrementalBar('Processing Features', max = len(features))
 
     ### Compatibility checks
     # Feature file array size == feature name array size
-    if not len(args.features) == len(args.featureNames):
+    if not len(features) == len(featureNames):
         raise ValueError("Each feature file must be associated with a name!")
 
     ### Read in each featureFile
     logging.info("Reading and organizing supplied feature files...")
     featureFiles=[]
-    for i in args.features:
+    for i in features:
         f = bioframe.read_table(i, schema = 'bed3')
         featureFiles.append(f)
 
     ### Make dict of {featureName : featureFile}
     feature_dict={}
-    for i in range(0, len(args.features)):
-        feature_dict[args.featureNames[i]] = featureFiles[i]
-    
+    for i in range(0, len(features)):
+        feature_dict[featureNames[i]] = featureFiles[i]
+
     ### Overlap each featureFile with the binned genome
     # get chromsizes
-    chromsizes = bioframe.fetch_chromsizes(args.genome)
+    chromsizes = bioframe.fetch_chromsizes(genome)
     # bin the genome:
-    binned_genome = make_bins(int(args.resolution), chromsizes) 
+    binned_genome = make_bins(int(resolution), chromsizes)
     ### Give bins unique ids 
     binned_genome["rel_id"] = range(0,binned_genome.shape[0])
 
@@ -83,11 +73,30 @@ def main():
         binned_features_master[feature] = binned_features_dict
         fulllen_bar.finish()
         bar.next()
-        
+
     bar.finish()
 
     final = pd.DataFrame.from_dict(binned_features_master)
-    final.to_csv('{}_{}bp.matrix'.format(args.prefix, args.resolution), sep = "\t")
+    return final
+
+
+def main():
+    #### Arguments
+    parser = argparse.ArgumentParser(description = "Make a feature matrix from a given set of BED files")
+    parser.add_argument("--features", "-f", type=str, nargs = "*", help="Path to bed files containing feature regions. Format should be chr,start,end", required=True)
+    parser.add_argument("--featureNames", "-n", type=str, nargs = "*", help="Names of columns to be associated with features", required=True)
+    parser.add_argument("--resolution", "-r", type=int, help="Size (in bp) of bins. Typically in the range of 400 - 25000", required=True)
+    parser.add_argument("--genome", "-g", type=str, help="Genome assembly used to align feature samples", required=False, default='hg38')
+    parser.add_argument("--prefix", "-p", type=str, help="Prefix for output file: {prefix}_{res}bp.matrix", default="featureMatrix")
+    #parser.add_argument("--dots", "-d", type=str, help="Path to dots (chr1,start1,end1,chr2,start2,end2), whose Anchors will be present as features in the output matrix")
+    args=parser.parse_args()
+
+    if args.prefix is not None:
+        final = make_feature_matrices(args.features, args.featureNames, args.resolution, args.genome)
+    else:
+        final = make_feature_matrices(args.features, args.featureNames, args.resolution, args.genome)
+
+    final.to_csv("{}_res{}.matrix".format(args.prefix, args.resolution), sep = "\t")
     
 if __name__ == "__main__":
     main()
