@@ -50,13 +50,13 @@ def make_feature_matrices(features, featureNames, resolution, genome):
     binned_genome["rel_id"] = range(0,binned_genome.shape[0])
 
     ### Pybedtools for intersection
-    binned_genome = pybedtools.BedTool.from_dataframe(binned_genome)
+    binned_genome_bt = pybedtools.BedTool.from_dataframe(binned_genome)
     binned_features_master = {}
     for feature in feature_dict:
         binned_features_dict = {}
         feature_bedtool = pybedtools.BedTool.from_dataframe(feature_dict[feature])
         # intersect with binned genome
-        binned_features = binned_genome.intersect(feature_bedtool, wao=True)
+        binned_features = binned_genome_bt.intersect(feature_bedtool, wao=True)
         # binned_features.to_dataframe(disable_auto_names=True, header=None).to_csv('overlap_test.tsv', sep="\t")
         ### Make column for this feature
         # dict structure: {bin_id : feature_status (1/0)}
@@ -77,6 +77,9 @@ def make_feature_matrices(features, featureNames, resolution, genome):
     bar.finish()
 
     final = pd.DataFrame.from_dict(binned_features_master)
+    final.insert(0, "chrom", binned_genome.iloc[:,0])
+    final.insert(1, "start", binned_genome.iloc[:,1])
+    final.insert(2, "end", binned_genome.iloc[:,2])
     return final
 
 
