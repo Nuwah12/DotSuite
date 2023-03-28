@@ -4,13 +4,14 @@ This way, when we call dots on Hi-C/Micro-C/HiChIP (eventually), we can filter t
 Sort of like a compendium for by-celltype epigenomic features
 This gives meaning to dots called on a matrix  - the nature of these methods obscures the meaning of the loops, as they are commonly presented as dots on the interaction matrix
 
-### Todo:
-* Suite for analyzing called dots - script that will do actual analysis of dots
-  * Anchors treated as features
-  * Percent occupancy of anchor spaces by arch. proteins (both anchors, 1 anchor, 0 anchors)
-  * Types of loops with respect to enhancers and promoters (E-E / E-P / P-P)
-  * Visualization - % occupied, % type of interaction
-  * Retain identity of loop when it is in feature matrix (do not mark with 1, instead make a "loop ID")
-  * Where to get promoter list from?
-  * Gene expression levels?
-* How can I implement gene regulation aspects ... annotate promoter bins w/ gene name?
+### 3/26/23
+Clustering of genomic bins marked for presence of multiple eipgenomic features
+Sample clustering algorithms that work well with binary (1 or 0) data
+
+### Bernoulli Mixture model 
+https://bayespy.org/examples/bmm.html#results
+
+### Proximus
+https://en.wikibooks.org/wiki/Data_Mining_Algorithms_In_R/Clustering/Proximus
+
+
