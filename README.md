@@ -14,4 +14,5 @@ https://bayespy.org/examples/bmm.html#results
 ### Proximus
 https://en.wikibooks.org/wiki/Data_Mining_Algorithms_In_R/Clustering/Proximus
 
-
+### Hidden Markov Model (HMM)
+https://medium.com/@postsanjay/hidden-markov-models-simplified-c3f58728caab
