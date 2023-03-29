@@ -8,6 +8,9 @@ This gives meaning to dots called on a matrix  - the nature of these methods obs
 Clustering of genomic bins marked for presence of multiple eipgenomic features
 Sample clustering algorithms that work well with binary (1 or 0) data
 
+###K-Modes
+https://cran.r-project.org/web/packages/klaR/index.html
+
 ### Bernoulli Mixture model 
 https://bayespy.org/examples/bmm.html#results
 
@@ -16,3 +19,9 @@ https://en.wikibooks.org/wiki/Data_Mining_Algorithms_In_R/Clustering/Proximus
 
 ### Hidden Markov Model (HMM)
 https://medium.com/@postsanjay/hidden-markov-models-simplified-c3f58728caab
+
+### Apriori 
+https://github.com/search?q=apriori%20algorithm
+
+### Frequent Pattern (FP) Growth
+https://www.javatpoint.com/fp-growth-algorithm-in-data-mining
