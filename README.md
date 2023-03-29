@@ -8,7 +8,7 @@ This gives meaning to dots called on a matrix  - the nature of these methods obs
 Clustering of genomic bins marked for presence of multiple eipgenomic features
 Sample clustering algorithms that work well with binary (1 or 0) data
 
-###K-Modes
+### K-Modes
 https://cran.r-project.org/web/packages/klaR/index.html
 
 ### Bernoulli Mixture model 
